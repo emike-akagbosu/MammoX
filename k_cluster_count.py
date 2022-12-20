@@ -2,10 +2,7 @@ import numpy as np
 import cv2
 import os
 import csv
-
-import icalendar
-import os
-import pytz
+import tqdm
 
 filepath = []
 file = []
@@ -26,21 +23,21 @@ def process(filepath,file):
     criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 10, 1.0)
 
     # Clusters
-    k = 6
-
+    k = 8
     attempts = 10
 
     #ret,label,center=cv.kmeans(img2,k,None,criteria,attempts,cv.KMEANS_RANDOM_CENTERS)
     ret,label,centre=cv2.kmeans(img2,k,None,criteria,attempts,cv2.KMEANS_PP_CENTERS)
-
     # Convert centres into unsigned integers
     centre = np.uint8(centre)
 
     res = centre[label.flatten()]
     res2 = res.reshape((img.shape))
-    #cv2.imshow('Binary Threshold',res2)
+    res3 = cv2.resize(res2, (400, 600))
+    cv2.imshow('K = 8',res3)
+    cv2.waitKey(0)
 
-    RGB_values= [centre[0][0], centre[1][0], centre[2][0], centre[3][0],centre[4][0],centre[5][0]]
+    RGB_values= [centre[0][0], centre[1][0], centre[2][0], centre[3][0],centre[4][0],centre[5][0], centre[6][0],centre[7][0]]
     RGB_values = np.sort(RGB_values)
 
     # Count the number of pixels in each cluster
@@ -50,29 +47,35 @@ def process(filepath,file):
     count4 = np.count_nonzero((res2 == RGB_values[3]).all(axis = 2))
     count5 = np.count_nonzero((res2 == RGB_values[4]).all(axis = 2)) 
     count6 = np.count_nonzero((res2 == RGB_values[5]).all(axis = 2))
+    count7 = np.count_nonzero((res2 == RGB_values[6]).all(axis = 2))
+    count8 = np.count_nonzero((res2 == RGB_values[7]).all(axis = 2))
 
-    totalno = count1+ count2 +count3 +count4+count5+count6
+
+    totalno = count1+ count2 +count3 +count4+count5+count6+count7+count8
 
     # Lower RGB number means darker
-    array_to_add = [file,count1,count2,count3,count4,count5,count6]
+    array_to_add = [file,count1,count2,count3,count4,count5,count6, count7, count8]
     for x in range(1,len(array_to_add)):
                    array_to_add[x] = (array_to_add[x]/totalno)*100
 
-    return(array_to_add)                
+    density_percentage = (count7+count8)/(totalno-count1) * 100 #percentage nonfat to fat, using lower threshold
+    dens_perc = (count8)/(totalno-count1) * 100 #percentage nonfat to fat, using higher threshold
+    print(density_percentage)
+    print(dens_perc)
+    return(array_to_add)               
 
     # This can be used in the grayscale case
     # np.count_nonzero(img == value)
 
-    #density_percentage = (count3)/(img2.shape[0]-count1) * 100
-    #print(density_percentage)
+    
 
 
 #def extract_density(filepath,file)    
 
-rootdir = 'C:/Users/Indum/Documents/Year3/Programming/project/csv_test/'
+rootdir = 'C:/Users/sarah/OneDrive/Dokumente/MammoX/test'
 
 f = open(rootdir + 'csv_file', 'w')
-header = ['picture', 'count1', 'count2', 'count3', 'count4', 'count5', 'count6','density']
+header = ['picture', 'count1', 'count2', 'count3', 'count4', 'count5', 'count6', 'count7','count8','density']
 writer = csv.writer(f)
 writer.writerow(header)
 f.close()
@@ -80,6 +83,7 @@ f.close()
 for subdir, dirs, files in os.walk(rootdir):
     for file in files:
         filepath = os.path.join(subdir, file)
+        print(filepath)
         for x in range(0,len(str(file))):
             if (file).find("ics")!=-1:
                 e = open(filepath, 'rb')
