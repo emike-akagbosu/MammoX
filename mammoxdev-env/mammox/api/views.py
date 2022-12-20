@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from functions.func import calculate
+
 from .form import ImageForm
 from .models import Mammogram
 
