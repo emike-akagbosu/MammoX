@@ -95,15 +95,59 @@ def process(input_image):
     count5 = np.count_nonzero(res2 == RGB_values[4])
     count6 = np.count_nonzero(res2 == RGB_values[5])
 
-    totalno = count1+ count2 +count3 +count4+count5+count6
+    totalno = count2 +count3 +count4+count5+count6
 
     # Lower RGB number means darker
-    array_to_add = [file,count1,count2,count3,count4,count5,count6]
-    for x in range(1,len(array_to_add)):
-                   array_to_add[x] = (array_to_add[x]/(totalno))*100
+    array_to_add = [file, count1, count2, count3, count4, count5, count6]
+    for x in range(1, len(array_to_add)):
+        array_to_add[x] = (array_to_add[x] / (totalno)) * 100
+    density_percentage = (count6 + count5 + count4) / (totalno) * 100  # percentage nonfat to fat, using lower threshold
 
-    return array_to_add, res2             
+    return array_to_add, res2
 
+    # density_percentage = (count3)/(img2.shape[0]-count1) * 100
+    # print(density_percentage)
+
+def remove_pect(input_image, original_bg):
+    '''The input to this function has to be (segmented image, image with background removed)'''
+
+    img = input_image
+    img2 = original_bg
+
+    hh, ww = img.shape[:2]
+
+    #img = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    #img2 = cv2.cvtColor(img2, cv2.COLOR_BGR2GRAY)
+
+    ret, thresh = cv2.threshold(img, 200, 255, cv2.THRESH_BINARY)
+
+    # apply morphology close to remove small regions
+    kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5))
+    morph = cv2.morphologyEx(thresh, cv2.MORPH_CLOSE, kernel)
+
+    # apply morphology open to separate breast from other regions
+    kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5))
+    morph = cv2.morphologyEx(morph, cv2.MORPH_OPEN, kernel)
+
+    # get largest contour
+    contours = cv2.findContours(morph, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    contours = contours[0] if len(contours) == 2 else contours[1]
+    # big_contour = min(contours, key=cv2.contourArea)
+    big_contour = max(contours, key=cv2.contourArea)
+
+    # draw largest contour as white filled on black background as mask
+    mask = np.zeros((hh, ww), dtype=np.uint8)
+    cv2.drawContours(mask, [big_contour], 0, 255, cv2.FILLED)
+
+    # dilate mask
+    kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (2, 2))
+    mask = cv2.morphologyEx(mask, cv2.MORPH_DILATE, kernel)
+    inv_mask = np.invert(mask)
+
+    # apply mask to image
+    result = cv2.bitwise_and(img2, img2, mask=inv_mask)
+
+    return result
 
     #density_percentage = (count3)/(img2.shape[0]-count1) * 100
     #print(density_percentage)
@@ -111,8 +155,8 @@ def process(input_image):
 
 start = time.time()   
 
-rootdir = 'C:/Users/emike/OneDrive - Imperial College London/Programming 3/case0202/'
-#rootdir = 'C:/cygwin64/home/DDSM-LJPEG-Converter/cases2and3/'
+#rootdir = 'C:/Users/emike/OneDrive - Imperial College London/Programming 3/case0202/'
+rootdir = 'C:/cygwin64/home/DDSM-LJPEG-Converter/cases2and3/'
 #rootdir = 'C:/Users/Indum/Documents/Year3/Programming/project/csv_test/'
 
 f = open(rootdir + 'csv_file', 'w')
@@ -152,6 +196,31 @@ for subdir, dirs, files in os.walk(rootdir):
                f.close()
                break
 
+            elif (file).find("MLO") != -1:
+                # Add lines to remove background first
+                filename_without_ext = os.path.splitext(file)[0]
+                output = remove_background(filepath)
+
+                result_array0, output_seg = process(output)
+
+                pect_removed = remove_pect(output_seg,output)
+
+                result_array, output_seg2 = process(pect_removed)
+
+                cv2.imwrite(strippath + '/' + filename_without_ext + '_pect.png',output_seg2)
+                result_array.append(densityno)
+                print(result_array)
+                f = open(rootdir + 'csv_file', 'a')
+                # create the csv writer
+                writer = csv.writer(f)
+                # write a row to the csv file
+                writer.writerow(result_array)
+                # close the file
+                f.close()
+                break
+
+#print(filename_without_ext)
+#print(strippath)
 end = time.time()
 
 print("The time of execution of above program is :",
