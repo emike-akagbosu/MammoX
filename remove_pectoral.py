@@ -1,9 +1,9 @@
 import cv2
 import numpy as np
 
-path = 'C:\cygwin64\home\DDSM-LJPEG-Converter\cases2and3\case0002\A_0002_1.RIGHT_MLO_segmented.png'
+path = 'C:\cygwin64\home\DDSM-LJPEG-Converter\cases2and3\case0002\A_0002_1.RIGHT_MLO_segmented_k4.png'
 image = cv2.imread(path)
-
+img2 = cv2.imread('C:\cygwin64\home\DDSM-LJPEG-Converter\cases2and3\case0002\A_0002_1.RIGHT_MLO_result2.png')
 #image = cv2.cvtColor(image1, cv2.COLOR_BGR2GRAY)
 
 # apply otsu thresholding
@@ -12,7 +12,9 @@ image = cv2.imread(path)
 hh,ww = image.shape[:2]
 
 img = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-ret, thresh = cv2.threshold(img, 128, 255, cv2.THRESH_BINARY)
+img2 = cv2.cvtColor(img2, cv2.COLOR_BGR2GRAY)
+
+ret, thresh = cv2.threshold(img, 200, 255, cv2.THRESH_BINARY)
 #ret, thresh = cv2.threshold(img, 128, 255, cv2.THRESH_OTSU)
 
 # apply morphology close to remove small regions
@@ -39,12 +41,13 @@ mask = cv2.morphologyEx(mask, cv2.MORPH_DILATE, kernel)
 inv_mask = np.invert(mask)
 
 # apply mask to image
-result = cv2.bitwise_and(img, img, mask=inv_mask)
+result = cv2.bitwise_and(img2, img2, mask=inv_mask)
 
 #cv2.imshow('thresh', thresh)
 #cv2.imshow('morph', morph)
 #cv2.imshow('mask', mask)
 #cv2.imshow('Inverse mask', inv_mask)
-cv2.imshow('result', result)
+#cv2.imshow('result', result)
 
 cv2.imwrite('C:\cygwin64\home\DDSM-LJPEG-Converter\cases2and3\case0002\A_0002_1.RIGHT_MLO_pect.png',result)
+cv2.imwrite('C:\cygwin64\home\DDSM-LJPEG-Converter\cases2and3\case0002\A_0002_1.RIGHT_MLO_invmask.png',inv_mask)
