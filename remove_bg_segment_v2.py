@@ -70,7 +70,7 @@ def process(input_image):
     criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 10, 1.0)
 
     # Clusters
-    k = 6
+    k = 4
 
     attempts = 10
 
@@ -84,7 +84,8 @@ def process(input_image):
     res2 = res.reshape((img.shape))
     #cv2.imshow('Binary Threshold',res2)
 
-    RGB_values= [centre[0][0], centre[1][0], centre[2][0], centre[3][0],centre[4][0],centre[5][0]]
+    #,centre[4][0],centre[5][0]
+    RGB_values= [centre[0][0], centre[1][0], centre[2][0], centre[3][0]]
     RGB_values = np.sort(RGB_values)
 
     # Count the number of pixels in each cluster
@@ -92,16 +93,16 @@ def process(input_image):
     count2 = np.count_nonzero(res2 == RGB_values[1])
     count3 = np.count_nonzero(res2 == RGB_values[2])
     count4 = np.count_nonzero(res2 == RGB_values[3])
-    count5 = np.count_nonzero(res2 == RGB_values[4])
-    count6 = np.count_nonzero(res2 == RGB_values[5])
+    #count5 = np.count_nonzero(res2 == RGB_values[4])
+    #count6 = np.count_nonzero(res2 == RGB_values[5])
 
-    totalno = count2 +count3 +count4+count5+count6
+    totalno = count2 +count3 +count4#+count5+count6
 
     # Lower RGB number means darker
-    array_to_add = [file, count1, count2, count3, count4, count5, count6]
+    array_to_add = [file, count1, count2, count3, count4] #, count5, count6]
     for x in range(1, len(array_to_add)):
         array_to_add[x] = (array_to_add[x] / (totalno)) * 100
-    density_percentage = (count6 + count5 + count4) / (totalno) * 100  # percentage nonfat to fat, using lower threshold
+    #density_percentage = (count6 + count5 + count4) / (totalno) * 100  # percentage nonfat to fat, using lower threshold
 
     return array_to_add, res2
 
@@ -116,10 +117,10 @@ def remove_pect(input_image, original_bg):
 
     hh, ww = img.shape[:2]
 
-    #img = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    #img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     #img2 = cv2.cvtColor(img2, cv2.COLOR_BGR2GRAY)
 
-    ret, thresh = cv2.threshold(img, 200, 255, cv2.THRESH_BINARY)
+    ret, thresh = cv2.threshold(img, 150, 255, cv2.THRESH_BINARY)
 
     # apply morphology close to remove small regions
     kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5))
@@ -196,14 +197,18 @@ for subdir, dirs, files in os.walk(rootdir):
                f.close()
                break
 
-            elif (file).find("MLO") != -1:
+            if (file).find("MLO") != -1:
                 # Add lines to remove background first
                 filename_without_ext = os.path.splitext(file)[0]
                 output = remove_background(filepath)
 
-                result_array0, output_seg = process(output)
+                result_array, output_seg = process(output)
+
+                cv2.imwrite(strippath + '/' + filename_without_ext + '_bg.png', output)
+                cv2.imwrite(strippath + '/' + filename_without_ext + '_seg.png', output_seg)
 
                 pect_removed = remove_pect(output_seg,output)
+
 
                 result_array, output_seg2 = process(pect_removed)
 
