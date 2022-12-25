@@ -5,6 +5,25 @@
 ##show picture
 #im.show()
 
+from PIL import Image
+
+import os
+ROOT_DIR = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
+
+directory = os.fsencode(os.path.join(ROOT_DIR, 'files/input'))
+    
+
+
+
+def calculate(a,b):
+    total = ''
+    for file in os.listdir(directory):
+        im=Image.open(os.path.join(directory, file))
+        total += str(im.size) # (width,height) tuple
+    return(total)
+
+
+     
 
 ##import the cv2 module.
 #import cv2 as cv
@@ -20,3 +39,4 @@
 #cv.waitKey(0)
 ##destroyallwindows used to free up resources
 #cv.destroyAllWindows()
+

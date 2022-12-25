@@ -5,7 +5,7 @@
 <head>
     <meta name = "viewport" content="with=device-width, initial-scale=1.0"> 
     <title> MammoX: Breast Density Detector </title>
-    <link rel="shortcut icon" href="Images/logo.png">
+    <link rel="shortcut icon" href="{% static 'Images/logo.png' %}">
     <link rel="stylesheet" href="{% static 'style.css' %}" >
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,6 +15,8 @@
 <body>
     <section class="header">
         <nav1>
+            <a href="index.html"> <img src="{% static 'Images/fulllogo.png' %}"></a>
+           
             <div class="nav-links1">
                 <ul>
                     <li><a href="index.html">Home</a></li>
@@ -23,17 +25,30 @@
                 </ul>
             </div>
         </nav1>
-    
-        <div class="text-box">
-            <form action="." method="post" enctype="multipart/form-data">
+        <div class="frame">
+          <img src="{% static 'Images/indexbody.png' %}" style="width:1250px;">
+
+            <div class="text-box">
+                <form action="." method="post" enctype="multipart/form-data">
+
 
                 {% csrf_token %}
                 {{form.as_p}}
                 <button type="submit" class="hero-btn">Upload your Mammogram Image</button>
     
-        </form>    
+                </form> 
+            </div>
+         </div>
+
+
+        <div class="break">
+            <img src="{% static 'Images/line.png' %}" style="width:1400px;">
+        </div>
+
+	
+       
         
-    </div>
+    
     </section>
 
 </body>

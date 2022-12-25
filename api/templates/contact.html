@@ -6,7 +6,7 @@
 <head>
     <meta name = "viewport" content="with=device-width, initial-scale=1.0"> 
     <title> MammoX: Breast Density Detector </title>
-    <link rel="shortcut icon" href="Images/logo.png">
+    <link rel="shortcut icon" href="{% static 'Images/logo.png' %}">
     <link rel="stylesheet" href="{% static 'style.css' %}" >
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,10 +15,10 @@
 
 <body>
 
-<!-------Contact------->
 
 <section class = "contact">
     <nav3>
+        <a href="index.html"> <img src="{% static 'Images/fulllogo.png' %}"></a>
         <div class="nav-links3">
             <ul>
                 <li><a href="index.html">Home</a></li>
@@ -27,6 +27,7 @@
             </ul>
         </div>
     </nav3>
+    <div class="contactframe">
     <div class = "comment-box">
         <form action="form-handle.php" name="name" method="post" class="contact-form" style = "position:relative; left:20px; top:90px;">
             <input type = "text" name="name" placeholder="Enter Name">
@@ -34,7 +35,13 @@
             <textarea rows="5" name="message" placeholder = "Your Message to MammoX Team"></textarea>
             <button type="submit" class="hero-btn" style = "position:relative; left:-690px; top:60px;">Send Message </button>
         </form>
-
+    </div>
+    <div class ="title">
+        <img src="{% static 'Images/contacttitle.png' %}" style="width:500px;">
+    </div>
+    <div class ="placeholder">
+        <img src="{% static 'Images/biglogo.png' %}" style="width:500px;">
+    </div>
     </div>
 </section>
 

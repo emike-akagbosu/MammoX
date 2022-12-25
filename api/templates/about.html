@@ -6,7 +6,7 @@
 <head>
     <meta name = "viewport" content="with=device-width, initial-scale=1.0"> 
     <title> MammoX: Breast Density Detector </title>
-    <link rel="shortcut icon" href="Images/logo.png">
+    <link rel="shortcut icon" href="{% static 'Images/logo.png' %}">
     <link rel="stylesheet" href="{% static 'style.css' %}" >
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,9 +14,9 @@
 </head>
 
 <body>
-<!-------About------->
     <section class = "about">
-        <nav>
+        <nav2>
+            <a href="index.html"> <img src="{% static 'Images/fulllogo.png' %}"></a>
             <div class="nav-links2">
                 <ul>
                     <li><a href="index.html">Home</a></li>
@@ -24,10 +24,7 @@
                     <li><a href="contact.html">Contact</a></li>
                 </ul>
             </div>
-        </nav>
+        </nav2>
     </section>
 
-
-
 </body>>
-
