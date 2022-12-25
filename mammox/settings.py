@@ -29,7 +29,8 @@ SECRET_KEY = 'django-insecure-z706ln0j23lm73moh!gso_y2#d$94y$h05_0mmhihh%d+69#e1
 DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1:8000',
-                '127.0.0.1' ]
+                '127.0.0.1',
+                'mammox.herokuapp.com']
 
 
 # Application definition
