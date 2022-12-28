@@ -1,0 +1,49 @@
+{% load static %}
+<!DOCTYPE html>
+
+<html>
+    
+<head>
+    <meta name = "viewport" content="with=device-width, initial-scale=1.0"> 
+    <title> MammoX: Breast Density Detector </title>
+    <link rel="shortcut icon" href="{% static 'Images/logo.png' %}">
+    <link rel="stylesheet" href="{% static 'style.css' %}" >
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+
+<section class = "contact">
+    <nav3>
+        <a href="index.html"> <img src="{% static 'Images/fulllogo.png' %}"></a>
+        <div class="nav-links3">
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </div>
+    </nav3>
+    <div class="contactframe">
+    <div class = "comment-box">
+        <form action="form-handle.php" name="name" method="post" class="contact-form" style = "position:relative; left:20px; top:90px;">
+            <input type = "text" name="name" placeholder="Enter Name">
+            <input type = "email" name="email" placeholder="Enter Email">
+            <textarea rows="5" name="message" placeholder = "Your Message to MammoX Team"></textarea>
+            <button type="submit" class="hero-btn" style = "position:relative; left:-690px; top:60px;">Send Message </button>
+        </form>
+    </div>
+    <div class ="title">
+        <img src="{% static 'Images/contacttitle.png' %}" style="width:500px;">
+    </div>
+    <div class ="placeholder">
+        <img src="{% static 'Images/biglogo.png' %}" style="width:500px;">
+    </div>
+    </div>
+</section>
+
+</body>>
+
