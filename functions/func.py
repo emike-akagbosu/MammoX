@@ -1,42 +1,83 @@
-##importing the Image class from PIL package
-#from PIL import Image
-##read the image, creating an object
-#im = Image.open(r"C:\Users\sonya\Documents\y3_prog\MammoX\mammoxdev-env\mammox\files\input\breast-calcification-mammogram.jpg")
-##show picture
-#im.show()
-
 from PIL import Image
-
 import os
+import joblib 
+import numpy as np
+import pandas as pd
+from skimage.io import imread, imshow
+from skimage.color import rgb2gray
+from skimage.measure import label, regionprops, regionprops_table
+from skimage.filters import threshold_otsu
+from skimage.morphology import area_closing, area_opening
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+
+#Set up directory names for image and for stored model
 ROOT_DIR = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
-
 directory = os.fsencode(os.path.join(ROOT_DIR, 'files/input'))
-    
+modeldir = os.fsencode(os.path.join(ROOT_DIR, 'RF_compressed.joblib'))
 
 
 
-def calculate(a,b):
-    total = ''
+def final_classifier():
     for file in os.listdir(directory):
-        im=Image.open(os.path.join(directory, file))
-        total += str(im.size) # (width,height) tuple
-    return(total)
+        filepath = os.path.realpath((os.path.join(directory, file))).decode("utf-8")
+        filename = str(file.decode("utf-8"))
+    
+    def get_properties(rootdir):
 
+        properties = ['area','convex_area',
+                     'bbox_area','major_axis_length', 
+                     'minor_axis_length', 'perimeter',  
+                     'equivalent_diameter', 'mean_intensity',  
+                     'solidity', 'eccentricity']
+        dataframe = pd.DataFrame(columns=properties)
+        grayscale = imread(filepath)
+        threshold = threshold_otsu(grayscale)
+        binarized = grayscale < threshold         
+        closed = area_closing(binarized,1000)
+        opened = area_opening(closed,1000)
+        labeled = label(opened)
+        regions = regionprops(labeled)
+        data = pd.DataFrame(regionprops_table(grayscale, grayscale,
+                            properties=properties))
+        data = data[(data.index!=0) & (data.area>100)]
+        dataframe = pd.concat([dataframe, data])
+        return dataframe
 
-     
+    density = get_properties(directory)
+    density['type'] = 'unknown'
+    #print("The shape of the dataframe is: ", density.shape)
+    #display(density)
 
-##import the cv2 module.
-#import cv2 as cv
-##imread method loads the image. We can use a relative path if 
-##picture and python file are in the same folder
-#img = cv.imread('C:\Users\sonya\Documents\y3_prog\MammoX\mammoxdev-env\mammox\files\input\breast-calcification-mammogram.jpg')
-##method resize is used to modify de size of the picture
-#imS = cv.resize(img, (960, 540))
-##We use imshow method to show the picture
-#cv.imshow('Picture of trees',imS)
-##If we don’t use the waitKey method, picture
-##show and disappears immediately.
-#cv.waitKey(0)
-##destroyallwindows used to free up resources
-#cv.destroyAllWindows()
+    dff = density
+    dff['ratio_length'] = (dff['major_axis_length'] / 
+                          dff['minor_axis_length'])
+    dff['perimeter_ratio_major'] = (dff['perimeter'] /  
+                                   dff['major_axis_length'])
+    dff['perimeter_ratio_minor'] = (dff['perimeter'] /
+                                   dff['minor_axis_length'])
+    dff['area_ratio_convex'] = dff['area'] / dff['convex_area']
+    dff['area_ratio_bbox'] = dff['area'] / dff['bbox_area']
+    dff['peri_over_dia'] = dff['perimeter'] / dff['equivalent_diameter']
+    final_dff = dff[dff.drop('type', axis=1).columns].astype(float)
+    final_dff = final_dff.replace(np.inf, 0)
+    X = final_dff
+    #display(X)
 
+    loaded_rf = joblib.load(modeldir)
+    #print(loaded_rf.predict(X))
+    final_output = loaded_rf.predict(X)
+    sum = 0
+    length = len(final_output)
+    for x in final_output:
+      sum = sum +int(x)
+    #print(sum/length)
+    final_predict = round(sum/length)
+    #print(round(sum/length))#final prediction
+    return(final_predict)
+
+for file in os.listdir(directory):
+        filepath = os.path.realpath((os.path.join(directory, file))).decode("utf-8")
+        filename = str(file.decode("utf-8"))
+
+print (filename)

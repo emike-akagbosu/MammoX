@@ -30,6 +30,7 @@
         
     
         <div class="small-border">
+
             <div class="result1">
                 <img src="{% static 'Images/results1.png' %}"></a>
             </div>
@@ -37,8 +38,17 @@
             <div class="result2">
                 <img src="{% static 'Images/results2.png' %}"></a>
             </div>
+            <div> {{display}} </div>
+            {% if img %}
+
+            <img src="{{ img.image.url}}" alt="image" class="img-thumbnail" >
+            {% endif %}
+            <hr>
+            
+        
         </div>
 
 
     </section>
 </body>
+
