@@ -26,7 +26,10 @@ def final_classifer(rootdir,modeldir):
                      'equivalent_diameter', 'mean_intensity',  
                      'solidity', 'eccentricity']
         dataframe = pd.DataFrame(columns=properties)
-        grayscale = rgb2gray(imread(file))
+        try:
+          grayscale = rgb2gray(imread(file))
+        except:
+          print("Wrong input format")
         threshold = threshold_otsu(grayscale)
         binarized = grayscale < threshold         
         closed = area_closing(binarized,1000)
