@@ -17,6 +17,7 @@ directory = os.fsencode(os.path.join(ROOT_DIR, 'api/static/Images/upload'))
 
     
 modeldir = os.fsencode(os.path.join(ROOT_DIR, 'RF_compressed.joblib'))
+modeldirMLO = os.fsencode(os.path.join(ROOT_DIR, 'RF_compressed_MLO.joblib'))
 
 
 
@@ -65,7 +66,10 @@ def final_classifier():
     final_dff = final_dff.replace(np.inf, 0)
     X = final_dff
     #display(X)
-    loaded_rf = joblib.load(modeldir)
+    if (directory).find("CC") != -1:
+        loaded_rf = joblib.load(modeldir)
+    elif (directory).find("MLO") != -1:
+        loaded_rf = joblib.load(modeldirMLO)
     print("loaded model")
     #print(loaded_rf.predict(X))
     final_output = loaded_rf.predict(X)
