@@ -11,18 +11,19 @@ from skimage.morphology import area_closing, area_opening
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 
-#Set up directory names for image and for stored model
 ROOT_DIR = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
-directory = os.fsencode(os.path.join(ROOT_DIR, 'files/input'))
+
+directory = os.fsencode(os.path.join(ROOT_DIR, 'api/static/Images/upload'))
+
+    
 modeldir = os.fsencode(os.path.join(ROOT_DIR, 'RF_compressed.joblib'))
 
 
 
 def final_classifier():
+    filepaths = []
     for file in os.listdir(directory):
-        filepath = os.path.realpath((os.path.join(directory, file))).decode("utf-8")
-        filename = str(file.decode("utf-8"))
-    
+        filepaths.append(os.path.realpath((os.path.join(directory, file))).decode("utf-8"))
     def get_properties(rootdir):
 
         properties = ['area','convex_area',
@@ -31,7 +32,8 @@ def final_classifier():
                      'equivalent_diameter', 'mean_intensity',  
                      'solidity', 'eccentricity']
         dataframe = pd.DataFrame(columns=properties)
-        grayscale = imread(filepath)
+        #grayscale = rgb2gray(imread(filepath))
+        grayscale = imread(filepaths[-1])
         threshold = threshold_otsu(grayscale)
         binarized = grayscale < threshold         
         closed = area_closing(binarized,1000)
@@ -46,7 +48,7 @@ def final_classifier():
 
     density = get_properties(directory)
     density['type'] = 'unknown'
-    #print("The shape of the dataframe is: ", density.shape)
+    print("The shape of the dataframe is: ", density.shape)
     #display(density)
 
     dff = density
@@ -74,10 +76,8 @@ def final_classifier():
     #print(sum/length)
     final_predict = round(sum/length)
     #print(round(sum/length))#final prediction
+
+
     return(final_predict)
 
-for file in os.listdir(directory):
-        filepath = os.path.realpath((os.path.join(directory, file))).decode("utf-8")
-        filename = str(file.decode("utf-8"))
 
-print (filename)

@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
-from functions.test_file import final_classifier
+from functions.func import final_classifier
 from .form import ImageForm
 from .models import Mammogram
 
