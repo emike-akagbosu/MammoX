@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
-from functions.func import calculate
+from functions.func import final_classifier
 from .form import ImageForm
 from .models import Mammogram
 
@@ -12,18 +12,27 @@ def main(request):
         if form.is_valid():
             form.save()
             obj=form.instance
-            return redirect("results.html")
+            display = final_classifier()
+  
+            
+        return render(request,"results.html", {"display":display, "img":obj})
+
             #render(request,"index.html",{"obj":obj})
     else:
         form=ImageForm()
-    img=Mammogram.objects.all()
+ 
     
-    return render(request,"index.html",{"img":img,"form":form})
+    return render(request,"index.html",{"form":form})
 
 def results(request):
-    display = calculate(3,2)
+    
+    img=Mammogram.objects.last()
+ 
+    return render(request,"results.html",{"img":img})
 
-    return render(request,"results.html", {"display":display})
+def redirect(request):
+
+    return render(request,"redirect.html")
 
 def about(request):
     return render(request,"about.html")
