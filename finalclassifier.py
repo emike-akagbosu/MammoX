@@ -33,6 +33,7 @@ def final_classifer(rootdir,modeldir):
           #error handling to check uploaded file is the correct format
           grayscale = rgb2gray(imread(file))
         except:
+           #if not correct format user is notified
           print("Wrong input format")
         threshold = threshold_otsu(grayscale)
         binarized = grayscale < threshold         
