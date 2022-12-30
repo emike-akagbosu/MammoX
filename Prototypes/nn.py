@@ -4,6 +4,8 @@ import urllib
 import numpy as np
 import csv
   
+#trying out a neural network for our dataset however accuracy was not good so we decided to not use it
+
 # Data sets
 training = 'C:/Users/Indum/Documents/Year3/Programming/project/csv_files/normals_pngcsv_file'
 rootdir = 'C:/Users/Indum/Documents/Year3/Programming/project/csv_files/'
