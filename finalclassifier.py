@@ -12,21 +12,25 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 
 
-
+#directory for user uploaded image
 rootdir = 'C:/Users/Indum/Documents/Year3/Programming/project/final/test_image/D_4595_1.LEFT_CC.png'
+#directory for model file
 modeldir = "C:/Users/Indum/Documents/Year3/Programming/project/final/random_forest.joblib"
 
 def final_classifer(rootdir,modeldir):
-
+    #this function gets the properties of the uploaded image
     def get_properties(rootdir):
         file = rootdir
+        #properties
         properties = ['area','convex_area',
                      'bbox_area','major_axis_length', 
                      'minor_axis_length', 'perimeter',  
                      'equivalent_diameter', 'mean_intensity',  
                      'solidity', 'eccentricity']
+        #arranges data in a table using pandas
         dataframe = pd.DataFrame(columns=properties)
         try:
+          #error handling to check uploaded file is the correct format
           grayscale = rgb2gray(imread(file))
         except:
           print("Wrong input format")
@@ -40,6 +44,7 @@ def final_classifer(rootdir,modeldir):
                             properties=properties))
         data = data[(data.index!=0) & (data.area>100)]
         dataframe = pd.concat([dataframe, data])
+        #dataset with all the values returned
         return dataframe
 
     density = get_properties(rootdir)
@@ -47,6 +52,7 @@ def final_classifer(rootdir,modeldir):
     print("The shape of the dataframe is: ", density.shape)
     #display(density)
 
+    #further properties calculated and added for higher model accuracy
     dff = density
     dff['ratio_length'] = (dff['major_axis_length'] / 
                           dff['minor_axis_length'])
@@ -62,16 +68,22 @@ def final_classifer(rootdir,modeldir):
     X = final_dff
     #display(X)
 
+    #model is loaded
     loaded_rf = joblib.load(modeldir)
     #print(loaded_rf.predict(X))
+    
+    #model used to predict density for each region in the image
     final_output = loaded_rf.predict(X)
     sum = 0
     length = len(final_output)
     for x in final_output:
       sum = sum +int(x)
     #print(sum/length)
+    
+    #average is calculated for each region in the image and rounded for prediction of the density
     final_predict = round(sum/length)
     #print(round(sum/length))#final prediction
     return(final_predict)
 
+#main function that is called
 final_predict = final_classifer(rootdir,modeldir)
