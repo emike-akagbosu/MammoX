@@ -9,7 +9,7 @@ traindata = trdata.flow_from_directory(directory="C:/Users/Indum/Documents/Year3
 tsdata = ImageDataGenerator()
 testdata = tsdata.flow_from_directory(directory="C:/Users/Indum/Documents/Year3/Programming/project/images/test", target_size=(224,224))
 
-
+#trying out vgg 16 model for our dataset - concluded that accuracy was too low and not a good fit
 
 model = Sequential()
 model.add(Conv2D(input_shape=(224,224,3),filters=64,kernel_size=(3,3),padding="same", activation="relu"))
