@@ -10,7 +10,7 @@ import time
 filepath = []
 file = []
 
-
+#function to remove background with otsu thresholding
 def remove_background(filepath):
     image1 = cv2.imread(filepath)
 
@@ -89,27 +89,7 @@ def process(input_image):
     RGB_values = [centre[0][0], centre[1][0], centre[2][0], centre[3][0]]
     RGB_values = np.sort(RGB_values)
 
-    # Count the number of pixels in each cluster
-    count1 = np.count_nonzero(res2 == RGB_values[0])  # Darkest
-    count2 = np.count_nonzero(res2 == RGB_values[1])
-    count3 = np.count_nonzero(res2 == RGB_values[2])
-    count4 = np.count_nonzero(res2 == RGB_values[3])
-    # count5 = np.count_nonzero(res2 == RGB_values[4])
-    # count6 = np.count_nonzero(res2 == RGB_values[5])
-
-    totalno = count2 + count3 + count4  # +count5+count6
-
-    # Lower RGB number means darker
-    array_to_add = [file, count1, count2, count3, count4]  # , count5, count6]
-    for x in range(1, len(array_to_add)):
-        array_to_add[x] = (array_to_add[x] / (totalno)) * 100
-    # density_percentage = (count6 + count5 + count4) / (totalno) * 100  # percentage nonfat to fat, using lower threshold
-
     return res2, RGB_values
-
-    # density_percentage = (count3)/(img2.shape[0]-count1) * 100
-    # print(density_percentage)
-
 
 def remove_pect(input_image, original_bg, thresh_value):
     '''The input to this function has to be (segmented image, image with background removed)'''
@@ -163,10 +143,12 @@ rootdir = 'C:/temp_7zip/normals_png/'
 #rootdir = 'C:/Users/Indum/Documents/Year3/Programming/project/csv_test/'
 writedir = 'C:/temp_7zip'
 
+#function goes through the root folder and checks each image, sees if its an MLO or CC image and then sorts it according to its density
 for subdir, dirs, files in os.walk(rootdir):
     for file in files:
         filepath = os.path.join(subdir, file)
         strippath = subdir
+        #finding ics file which contains information about the image such as density category
         for x in range(0, len(str(file))):
             if (file).find("ics") != -1:
                 e = open(filepath, 'rb')
@@ -176,6 +158,9 @@ for subdir, dirs, files in os.walk(rootdir):
                 print(densityno)
                 e.close()
                 break
+                 #loop stopped if file is found
+                    
+        #finding CC file        
         no = 1   
         for x in range(0, len(str(file))):
             if (file).find("CC") != -1:
@@ -184,6 +169,7 @@ for subdir, dirs, files in os.walk(rootdir):
                 output = remove_background(filepath)
                 if no<2:
                   #print('writing')  
+                #sorting images into correct folders
                   if densityno == 1:
                       cv2.imwrite(writedir+'/images/train/1CC/'+file,output)
                   elif densityno == 2:
@@ -195,7 +181,9 @@ for subdir, dirs, files in os.walk(rootdir):
                   no = no + 1
             if no == 2:
                 break
-                
+                 #loop stopped if file is found
+                    
+        #finding MLO file       
         no = 1
         for x in range(0, len(str(file))):
             if (file).find("MLO") != -1:
@@ -209,7 +197,7 @@ for subdir, dirs, files in os.walk(rootdir):
                 #threshold = 130 --> this worked for both in case0202
                 threshold = RGB_values[2]+5
                 pect_removed = remove_pect(output_seg, output, threshold)
-                
+                #sorting images into correct folders
                 if no<2:
                   #print('writing')  
                   if densityno == 1:
@@ -223,6 +211,7 @@ for subdir, dirs, files in os.walk(rootdir):
                   no = no + 1
             if no == 2:
                 break
+                #loop stopped if file is found
 
 
 end = time.time()
