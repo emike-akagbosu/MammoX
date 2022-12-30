@@ -11,6 +11,8 @@ import time
 filepath = []
 file = []
 
+#trying k means clustering to segment regions in different categories and then using resulting csv to input into model however accuracy was not good (0.45)
+#function to remove background with otsu
 def remove_background(filepath):
     image1 = cv2.imread(filepath)
 
@@ -55,6 +57,7 @@ def remove_background(filepath):
 
     return result
 
+#function to process image and segment into k amount of clusters
 def process(input_image):
     # In opencv, images are read as BGR
     img = input_image
@@ -117,6 +120,7 @@ start = time.time()
 #rootdir = 'C:/cygwin64/home/DDSM-LJPEG-Converter/cases2and3/'
 rootdir = 'C:/Users/Indum/Documents/Year3/Programming/project/csv_test/'
 
+#creating csv file with percentages of each cluster
 f = open(rootdir + 'csv_file', 'w')
 header = ['picture', 'count1', 'count2', 'count3', 'count4', 'count5', 'count6','density']
 writer = csv.writer(f)
