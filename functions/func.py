@@ -65,7 +65,7 @@ def final_classifier():
     final_dff = final_dff.replace(np.inf, 0)
     X = final_dff
     #display(X)
-
+    print("before model")
     loaded_rf = joblib.load(modeldir)
     #print(loaded_rf.predict(X))
     final_output = loaded_rf.predict(X)
@@ -75,7 +75,7 @@ def final_classifier():
       sum = sum +int(x)
     #print(sum/length)
     final_predict = round(sum/length)
-    #print(round(sum/length))#final prediction
+    print(round(sum/length))#final prediction
 
 
     return(final_predict)
