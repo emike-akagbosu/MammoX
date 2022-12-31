@@ -1,23 +1,21 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
-from functions.func import final_classifier
+from functions.func import final_classifier, clear_img
 from .form import ImageForm
 from .models import Mammogram
 
 
 # Create your views here.
 def main(request):
+    clear_img()
     if request.method == 'POST': 
         form=ImageForm(data=request.POST,files=request.FILES)
         if form.is_valid():
             form.save()
             obj=form.instance
-            display = final_classifier()
-  
+            band, pct = final_classifier()
             
-        return render(request,"results.html", {"display":display, "img":obj})
-
-            #render(request,"index.html",{"obj":obj})
+        return render(request,"results.html", {"display_band":band,"display_pct":pct, "img":obj})
     else:
         form=ImageForm()
  
@@ -25,7 +23,6 @@ def main(request):
     return render(request,"index.html",{"form":form})
 
 def results(request):
-    
     img=Mammogram.objects.last()
  
     return render(request,"results.html",{"img":img})

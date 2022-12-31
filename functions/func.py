@@ -10,6 +10,10 @@ from skimage.filters import threshold_otsu
 from skimage.morphology import area_closing, area_opening
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
+import shutil
+import warnings
+warnings.filterwarnings("ignore")
+
 
 ROOT_DIR = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
 
@@ -22,9 +26,9 @@ modeldirMLO = os.fsencode(os.path.join(ROOT_DIR, 'RF_compressed_MLO.joblib'))
 
 
 def final_classifier():
-    filepaths = []
+
     for file in os.listdir(directory):
-        filepaths.append(os.path.realpath((os.path.join(directory, file))).decode("utf-8"))
+        filepath = os.path.realpath((os.path.join(directory, file))).decode("utf-8")
     def get_properties(rootdir):
 
         properties = ['area','convex_area',
@@ -33,8 +37,12 @@ def final_classifier():
                      'equivalent_diameter', 'mean_intensity',  
                      'solidity', 'eccentricity']
         dataframe = pd.DataFrame(columns=properties)
-        #grayscale = rgb2gray(imread(filepath))
-        grayscale = imread(filepaths[-1])
+        try:
+          #error handling to check uploaded file is the correct format
+          grayscale = imread(filepath)
+        except:
+           #if not correct format user is notified
+          print("Wrong input format")
         threshold = threshold_otsu(grayscale)
         binarized = grayscale < threshold         
         closed = area_closing(binarized,1000)
@@ -49,7 +57,7 @@ def final_classifier():
 
     density = get_properties(directory)
     density['type'] = 'unknown'
-    print("The shape of the dataframe is: ", density.shape)
+    #print("The shape of the dataframe is: ", density.shape)
     #display(density)
 
     dff = density
@@ -66,11 +74,11 @@ def final_classifier():
     final_dff = final_dff.replace(np.inf, 0)
     X = final_dff
     #display(X)
-    if (directory).find("CC") != -1:
+    if (filepath).find("CC") != -1:
         loaded_rf = joblib.load(modeldir)
-    elif (directory).find("MLO") != -1:
+    elif (filepath).find("MLO") != -1:
         loaded_rf = joblib.load(modeldirMLO)
-    print("loaded model")
+    
     #print(loaded_rf.predict(X))
     final_output = loaded_rf.predict(X)
     sum = 0
@@ -79,9 +87,13 @@ def final_classifier():
       sum = sum +int(x)
     #print(sum/length)
     final_predict = round(sum/length)
-    print(round(sum/length))#final prediction
+    #print(round(sum/length))#final prediction
+    bands = np.array([0,25,50,75,100])
+    pct_range = str(bands[final_predict-1]) + "% - " + str(bands[final_predict]) + "%"
+    return(final_predict, pct_range)
 
 
-    return(final_predict)
-
-
+def clear_img():
+    if os.path.exists(directory) and os.path.isdir(directory):
+        shutil.rmtree(directory)
+    

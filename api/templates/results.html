@@ -38,9 +38,9 @@
             <div class="result2">
                 <img src="{% static 'Images/results2.png' %}"></a>
             </div>
-            <div> {{display}} </div>
+            <div> {{display_band}} {{display_pct}}</div>
+            
             {% if img %}
-
             <img src="{{ img.image.url}}" alt="image" class="img-thumbnail" >
             {% endif %}
             <hr>
