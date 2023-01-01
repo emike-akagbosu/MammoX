@@ -16,7 +16,7 @@ def main(request):
             obj=form.instance ## Form code from "add ref"
             band = final_classifier()
             
-            return render(request,"results.html", {"display_band":band, "img":obj})
+            return render(request,"redirectedres.html", {"display_band":band, "img":obj})
     else:
         form=ImageForm()
  
@@ -26,7 +26,7 @@ def main(request):
 def results(request):
     img=Mammogram.objects.last()
  
-    return render(request,"results.html",{"img":img})
+    return render(request,"redirectedres.html",{"img":img})
 
 def about(request):
     return render(request,"about.html")

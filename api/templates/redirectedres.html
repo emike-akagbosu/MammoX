@@ -102,6 +102,9 @@
                 </div>
                 <div class="resframe">
                     <img src="{% static 'Images/frame.png' %}"></a>
+                    {% if img %}
+                    <img src="{{ img.image.url}}" alt="image" height="50%" width="50%" class="img-thumbnail" >
+                    {% endif %}
                 </div>
             </div>
     
@@ -111,7 +114,9 @@
     
                 <div class="result2">
                     <img src="{% static 'Images/results2.png' %}"></a>
+                    <b> {{display_band}} {{display_pct}}</b>
                 </div>
+                
             </div>
     
     

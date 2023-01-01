@@ -389,4 +389,13 @@ nav5 img{
 }
 
 
+b {
+    color: #fff;
+    transform: translate(100%,150%);
+    font-size: 200%;
+  }
 
+  .img-thumbnail img{
+    width: 420px;
+    transform: translate(-100%,5%);
+  }

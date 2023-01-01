@@ -10,7 +10,7 @@ urlpatterns = [
     path('index.html', api.views.main),
     path('about.html', api.views.about),
     path('contact.html', api.views.contact),
-    path('results.html', api.views.results),
+    path('redirectedres.html', api.views.results),
  
 ]
 
