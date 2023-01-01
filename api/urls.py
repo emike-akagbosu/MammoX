@@ -3,13 +3,15 @@ from django.urls import path
 import api.views
 from django.conf.urls.static import static
 from django.conf import settings
+
+# Add each page as URL 
 urlpatterns = [
     path('', api.views.main),
     path('index.html', api.views.main),
     path('about.html', api.views.about),
     path('contact.html', api.views.contact),
     path('results.html', api.views.results),
-    path('redirect.html', api.views.redirect)
+ 
 ]
 
 

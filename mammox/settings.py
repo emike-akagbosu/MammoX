@@ -28,6 +28,7 @@ SECRET_KEY = 'django-insecure-z706ln0j23lm73moh!gso_y2#d$94y$h05_0mmhihh%d+69#e1
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+#Add local server and heroku as allowed hosts
 ALLOWED_HOSTS = ['127.0.0.1:8000',
                 '127.0.0.1',
                 'mammox.herokuapp.com']
@@ -122,6 +123,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
+#Set static URL and root for HTML images, style sheet and uploaded image folder
 PROJECT_ROOT = ''
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')

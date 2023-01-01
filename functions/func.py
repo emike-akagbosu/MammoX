@@ -90,7 +90,7 @@ def final_classifier():
     #print(round(sum/length))#final prediction
     bands = np.array([0,25,50,75,100])
     pct_range = str(bands[final_predict-1]) + "% - " + str(bands[final_predict]) + "%"
-    return(final_predict, pct_range)
+    return(final_predict)
 
 
 def clear_img():
