@@ -33,6 +33,8 @@
             <input type = "text" name="name" placeholder="Enter Name">
             <input type = "email" name="email" placeholder="Enter Email">
             <textarea rows="5" name="message" placeholder = "Your Message to MammoX Team"></textarea>
+            {% csrf_token %}
+            {{form.as_p}}
             <button type="submit" class="hero-btn" style = "position:relative; left:-690px; top:60px;">Send Message </button>
         </form>
     </div>
@@ -45,5 +47,4 @@
     </div>
 </section>
 
-</body>>
-
+</body>
