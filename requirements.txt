@@ -12,3 +12,4 @@ scikit-learn >= 1.0.2, <1.1.0
 pandas
 shutils
 coverage >= 7.0.1
+opencv-python
