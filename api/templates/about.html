@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 
 <html>
+
 <head>
     <meta name = "viewport" content="with=device-width, initial-scale=1.0"> 
     <title> MammoX: Breast Density Detector </title>
@@ -13,38 +14,20 @@
 </head>
 
 <body>
-    <section class="header">
-        <nav1>
+    <section class = "about">
+        <nav2>
             <a href="index.html"> <img src="{% static 'Images/fulllogo.png' %}"></a>
-           
-            <div class="nav-links1">
+            <div class="nav-links2">
                 <ul>
                     <li><a href="index.html">Home</a></li>
                     <li><a href="about.html">About</a></li>
                     <li><a href="contact.html">Contact</a></li>
                 </ul>
             </div>
-        </nav1>
-        <div class="frame">
-          <img src="{% static 'Images/indexbody.png' %}" style="width:1250px;">
+        </nav2>
+    </section>
 
-            <div class="text-box">
-                <form action="." method="post" enctype="multipart/form-data">
-
-
-                {% csrf_token %}
-                {{form.as_p}}
-                <button type="submit" class="hero-btn">Upload your Mammogram Image</button>
-    
-                </form> 
-            </div>
-         </div>
-         <div class="warning">
-            <img src="{% static 'Images/hometext.png' %}" style="width:750px;">
-         </div>
-        <div class="break">
-            <img src="{% static 'Images/line.png' %}" style="width:1400px;">
-        </div>
+</body>
 
 	
        
