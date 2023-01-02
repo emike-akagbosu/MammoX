@@ -7,6 +7,8 @@ from skimage.filters import threshold_otsu
 from skimage.morphology import area_closing, area_opening
 import shutil
 import cv2
+from skimage import io
+from skimage.color import rgb2gray
 import warnings
 warnings.filterwarnings("ignore")
 
@@ -151,8 +153,10 @@ def final_classifier():
                      'equivalent_diameter', 'mean_intensity',  
                      'solidity', 'eccentricity']
         dataframe = pd.DataFrame(columns=properties)
-        #grayscale = rgb2gray(outputfinal)
-        grayscale = outputfinal
+        try:
+            grayscale = rgb2gray(outputfinal)
+        except:
+            grayscale = outputfinal
         threshold = threshold_otsu(grayscale)
         binarized = grayscale < threshold         
         closed = area_closing(binarized,1000)
