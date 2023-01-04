@@ -198,19 +198,23 @@ def final_classifier():
     X = final_dff
     
     #display(X)
-    if (filepath).find("CC") != -1:
-        loaded_rf = joblib.load(modeldir)
-    elif (filepath).find("MLO") != -1:
-        loaded_rf = joblib.load(modeldirMLO)
-    #print(loaded_rf.predict(X))
-    final_output = loaded_rf.predict(X)
-    sum = 0
-    length = len(final_output)
-    for x in final_output:
-      sum = sum +int(x)
-    #print(sum/length)
-    final_predict = round(sum/length)
-    #print(round(sum/length))#final prediction
+    try:
+        if (filepath).find("CC") != -1:
+                loaded_rf = joblib.load(modeldir)
+
+        elif (filepath).find("MLO") != -1:
+            loaded_rf = joblib.load(modeldirMLO)
+        #print(loaded_rf.predict(X))
+        final_output = loaded_rf.predict(X)
+        sum = 0
+        length = len(final_output)
+        for x in final_output:
+          sum = sum +int(x)
+        #print(sum/length)
+        final_predict = round(sum/length)
+        #print(round(sum/length))#final prediction
+    except:
+        final_predict = 'Error loading algorithm'
 
 
     return(final_predict)
@@ -219,3 +223,9 @@ def clear_img():
     if os.path.exists(directory) and os.path.isdir(directory):
         shutil.rmtree(directory)
     
+
+
+# 1. Add input image to 'api/static/Images/upload', create upload folder if not there already
+# 2. Uncomment this code to run the algorithm.
+final_result = final_classifier()
+print(final_result)
