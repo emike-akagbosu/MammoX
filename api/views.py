@@ -14,9 +14,9 @@ def main(request):
         if form.is_valid():
             form.save()
             obj=form.instance ## Form code from "add ref"
-            band = final_classifier()
+            band, pct = final_classifier()
             
-            return render(request,"redirectedres.html", {"display_band":band, "img":obj})
+            return render(request,"redirectedres.html", {"display_band":band, "display_pct":pct, "img":obj})
     else:
         form=ImageForm()
  

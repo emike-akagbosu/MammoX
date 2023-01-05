@@ -10,7 +10,7 @@ import cv2
 from skimage import io
 from skimage.color import rgb2gray
 import warnings
-warnings.filterwarnings("ignore")
+#warnings.filterwarnings("ignore")
 
 
 ROOT_DIR = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
@@ -213,11 +213,16 @@ def final_classifier():
         #print(sum/length)
         final_predict = round(sum/length)
         #print(round(sum/length))#final prediction
+        bands = [0,25,50,75,100]
+        final_pct = '('+str(bands[final_predict-1]) + '% - ' +  str(bands[final_predict]) + '%)'
+       
     except:
         final_predict = 'Error loading algorithm'
+        final_pct = 'N/A'
 
+    
 
-    return(final_predict)
+    return(final_predict, final_pct)
 
 def clear_img():
     if os.path.exists(directory) and os.path.isdir(directory):
@@ -227,5 +232,5 @@ def clear_img():
 
 # 1. Add input image to 'api/static/Images/upload', create upload folder if not there already
 # 2. Uncomment this code to run the algorithm.
-final_result = final_classifier()
-print(final_result)
+#final_result = final_classifier()
+#print(final_result)
