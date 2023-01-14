@@ -1,5 +1,4 @@
 #*.joblib
 *.cpython-39.pyc
 *.sqlite3
-*.pyc
 */__pycache__/*
