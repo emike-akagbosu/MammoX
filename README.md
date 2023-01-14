@@ -10,7 +10,11 @@ Windows:
     - python .\manage.py makemigrations
     - python .\manage.py migrate
     - python .\manage.py runserver
-    
+
+Note: If you clone the repository using Pycharm,
+click 'OK' if given the option to automatically create
+a virtual environment from the requirements.txt file.
+
 macOS: 
 1. Clone repo on local device
 2. Navigate into mammoxdev-env/mammox directory
