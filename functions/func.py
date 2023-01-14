@@ -17,8 +17,6 @@ ROOT_DIR = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
 
 directory = os.fsencode(os.path.join(ROOT_DIR, 'api/static/Images/upload'))
 
-modeldir = os.fsencode(os.path.join(ROOT_DIR, 'RF_compressed.joblib'))
-modeldirMLO = os.fsencode(os.path.join(ROOT_DIR, 'RF_compressed_MLO.joblib'))
 
 def final_classifier():
     for file in os.listdir(directory):
@@ -199,6 +197,9 @@ def final_classifier():
     
     #display(X)
     try:
+        modeldir = os.fsencode(os.path.join(ROOT_DIR, 'RF_compressed.joblib'))
+        modeldirMLO = os.fsencode(os.path.join(ROOT_DIR, 'RF_compressed_MLO.joblib'))
+
         if (filepath).find("CC") != -1:
                 loaded_rf = joblib.load(modeldir)
 
