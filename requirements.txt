@@ -13,4 +13,5 @@ pandas
 shutils
 coverage >= 7.0.1
 opencv-python
+python-opencv
 opencv-python-headless
