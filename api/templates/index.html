@@ -30,10 +30,9 @@
 
             <div class="text-box">
                 <form action="." method="post" enctype="multipart/form-data">
-
-
                 {% csrf_token %}
                 {{form.as_p}}
+                <!-- Lines 32-34 'https://drive.google.com/file/d/1tp89cLBTYsFHuJtZgcjnt1dAQ2jv7q9l/view'-->
                 <button type="submit" class="hero-btn">Upload your Mammogram Image</button>
     
                 </form> 
