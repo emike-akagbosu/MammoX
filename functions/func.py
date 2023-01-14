@@ -18,6 +18,7 @@ ROOT_DIR = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
 directory = os.fsencode(os.path.join(ROOT_DIR, 'api/static/Images/upload'))
 
 
+
 def final_classifier():
     for file in os.listdir(directory):
         filepath = os.path.realpath((os.path.join(directory, file))).decode("utf-8")
