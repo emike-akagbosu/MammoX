@@ -358,9 +358,10 @@ nav5 img{
     width: 500px;
     transform: translate(60%,180%);
 }
-.resframe img{
+.image1 img{
     width: 420px;
-    transform: translate(-100%,5%);
+    transform: translate(-150%,5%);
+    position: absolute;
 }
 
 .top img{
@@ -389,4 +390,17 @@ nav5 img{
 }
 
 
+b {
+    color: #fff;
+    transform: translate(-110%,250%);
+    font-size: 200%;
+    position: absolute;
+  }
 
+  .image2 img{
+    width: 420px;
+    transform: translate(-247%,20%);
+    position: relative;
+    height: 300px;
+    width: auto;
+  }
