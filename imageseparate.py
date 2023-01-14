@@ -28,7 +28,8 @@ def remove_background(filepath):
 
     # apply otsu thresholding
     ret, thresh = cv2.threshold(img, 0, 255, cv2.THRESH_OTSU)
-
+    
+    # Reference 1 - taken from https://stackoverflow.com/questions/67227335/how-to-remove-mammography-tag-artifacts
     # apply morphology close to remove small regions
     kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5))
     morph = cv2.morphologyEx(thresh, cv2.MORPH_CLOSE, kernel)
@@ -52,7 +53,9 @@ def remove_background(filepath):
 
     # apply mask to image
     result = cv2.bitwise_and(img, img, mask=mask)
-
+    
+    # End of Reference 1
+    
     return result
 
 
