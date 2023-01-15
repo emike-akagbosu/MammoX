@@ -13,7 +13,7 @@ def main(request):
         form=ImageForm(data=request.POST,files=request.FILES)
         if form.is_valid():
             form.save()
-            obj=form.instance ## Form code from "add ref"
+            obj=form.instance ## Lines 12-16 "https://drive.google.com/file/d/1tp89cLBTYsFHuJtZgcjnt1dAQ2jv7q9l/view"
             band, pct = final_classifier()
             
             return render(request,"redirectedres.html", {"display_band":band, "display_pct":pct, "img":obj})
