@@ -95,7 +95,7 @@ def process(input_image):
     return res2, RGB_values
 
 def remove_pect(input_image, original_bg, thresh_value):
-    '''The input to this function has to be (segmented image, image with background removed)'''
+    '''The input to this function has to be (segmented image, image with background removed, threshold)'''
 
     img = input_image
     img2 = original_bg
